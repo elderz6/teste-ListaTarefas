@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node server.js",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -12,20 +12,22 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^14.2.0",
+    "@angular/cli": "~14.2.4",
     "@angular/common": "^14.2.0",
     "@angular/compiler": "^14.2.0",
+    "@angular/compiler-cli": "^14.2.0",
     "@angular/core": "^14.2.0",
     "@angular/forms": "^14.2.0",
     "@angular/platform-browser": "^14.2.0",
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
-    "@angular/cli": "~14.2.4",
-    "@angular/compiler-cli": "^14.2.0",
     "bootstrap": "^5.2.2",
+    "express": "^4.18.1",
+    "path": "^0.12.7",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.11.4",
-    "typescript": "~4.7.2"
+    "typescript": "~4.7.2",
+    "zone.js": "~0.11.4"
   },
   "engines": {
     "node": "16.17.0",
