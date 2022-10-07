@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:8080/tarefa'
+  apiUrl: 'https://teste-lista-tarefas-api.herokuapp.com/tarefa'
 };
