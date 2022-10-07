@@ -23,6 +23,10 @@ export class TarefaService {
         return this.http.put<Tarefa>(`${this.apiUrl}/update`, tarefa)
     }
 
+    public updateManyTarefas(tarefas: Tarefa[]): Observable<Tarefa[]>{
+        return this.http.put<Tarefa[]>(`${this.apiUrl}/updateMany`, tarefas)
+    }
+
     public deleteTarefa(id: number): Observable<Tarefa>{
         return this.http.delete<Tarefa>(`${this.apiUrl}/delete/${id}`);
     }

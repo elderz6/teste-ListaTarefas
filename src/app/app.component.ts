@@ -54,11 +54,11 @@ export class AppComponent implements OnInit {
       dataTarefa:'',
       ordemTarefa:this.maxOrder
     }
-    console.log(this.editarTarefa);
   }
 
-  public validarNome(nomeTarefa: string): Boolean{
-    if(this.tarefas.find(x => x.nomeTarefa == nomeTarefa)){
+  public validarNome(nomeTarefa: string, index: number): Boolean{
+    const aux = this.tarefas.find(x => x.nomeTarefa == nomeTarefa);
+    if(aux != undefined && aux.id != index){
       alert('Não são permitidos nomes iguais nas tarefas');
       return true;
     } else return false;
@@ -69,22 +69,26 @@ export class AppComponent implements OnInit {
       this.clearEdit();
       this.modalType = this.addTarefa;
       this.modalBtn = 'Criar Novo';
+      return;
     }
     if(type == 'edit' && tarefa != undefined) {
       this.modalType = this.updateTarefa;
       this.modalBtn = 'Editar';
       this.editarTarefa = tarefa;
+      return;
     }
     if(type == 'delete' && tarefa != undefined) {
       this.editarTarefa.id = tarefa.id;
+      return;
      }
   }
 
   public addTarefa(addForm: NgForm): void {
-    if (this.validarNome(addForm.value.nomeTarefa)) return;
+    if (this.validarNome(addForm.value.nomeTarefa, -1)) return;
     document.getElementById('closeModal')?.click();
     this.tarefaService.addTarefa(addForm.value).subscribe((response: Tarefa) => {
       this.getTarefas();
+      addForm.reset();
     }, (error: HttpErrorResponse) => {
       alert(error.message);
     })
@@ -92,7 +96,7 @@ export class AppComponent implements OnInit {
   }
 
   public updateTarefa(addForm: NgForm): void {
-    if (this.validarNome(addForm.value.nomeTarefa)) return;
+    if (this.validarNome(addForm.value.nomeTarefa, this.editarTarefa.id)) return;
     document.getElementById('closeModal')?.click();
     this.editarTarefa.nomeTarefa = addForm.value.nomeTarefa;
     this.editarTarefa.custoTarefa = addForm.value.custoTarefa;
@@ -108,6 +112,30 @@ export class AppComponent implements OnInit {
   public deleteTarefa(id: number): void{
     document.getElementById('closeModalDelete')?.click();
     this.tarefaService.deleteTarefa(id).subscribe((response: Tarefa) => {
+      this.getTarefas();
+    }, (error: HttpErrorResponse) => {
+      alert(error.message);
+    })
+  }
+
+  public subirTarefa(tarefa: Tarefa, index: number): void{
+    tarefa.ordemTarefa = tarefa.ordemTarefa - 1;
+    this.tarefas[index - 1].ordemTarefa = this.tarefas[index - 1].ordemTarefa + 1;
+
+    const payload = [tarefa, this.tarefas[index - 1]];
+    this.tarefaService.updateManyTarefas(payload).subscribe((response: Tarefa[]) => {
+      this.getTarefas();
+    }, (error: HttpErrorResponse) => {
+      alert(error.message);
+    })
+  }
+
+  public descerTarefa(tarefa: Tarefa, index: number): void{
+    tarefa.ordemTarefa = tarefa.ordemTarefa + 1;
+    this.tarefas[index + 1].ordemTarefa = this.tarefas[index + 1].ordemTarefa - 1;
+
+    const payload = [tarefa, this.tarefas[index + 1]];
+    this.tarefaService.updateManyTarefas(payload).subscribe((response: Tarefa[]) => {
       this.getTarefas();
     }, (error: HttpErrorResponse) => {
       alert(error.message);
